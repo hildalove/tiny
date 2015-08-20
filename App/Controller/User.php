@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Tiny\Cache\RedisPool;
 use Tiny\Controller\AbstractController;
 
 /**
@@ -42,5 +43,19 @@ class User extends  AbstractController
             print_r($a);
             die();
         }
+    }
+
+    /**
+     * test RdisPOOL
+     */
+    public function redis()
+    {
+        $configs = ['redis0' => ['host' => '192.168.10.10' , 'port' => 6379]];
+        RedisPool::addServer($configs);
+
+        $redis = RedisPool::getRedis('redis0');
+        //$redis->set('name', 'hanfeng');
+        echo $redis->get('name');
+
     }
 }
