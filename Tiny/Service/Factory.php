@@ -3,14 +3,31 @@ namespace Tiny\Service;
 
 use Tiny\Config\Application;
 use Tiny\Db\Pdo;
+use Tiny\Proxy\Proxy;
 
 class Factory
 {
-    public static function getDatabase()
+    private static $proxy = null;
+    public static function getDatabase($id = 'proxy')
     {
-        $dbConfig = Application::getInstance()->config['database'];
-        $db = Register::get('db');
+        $registerId = 'db_' . $id;
+        $db = Register::get($registerId);
         if (!$db) {
+            if ($id == 'proxy') {
+                if (self::$proxy === null) {
+                    self::$proxy = new Proxy();
+                }
+                return self::$proxy;
+            }
+
+            if ($id == 'master') {
+                $dbConfig = Application::getInstance()->config['database']['master'];
+            } else {
+                $slaves = Application::getInstance()->config['database']['slave'];
+                $slaveId = array_rand($slaves);
+                $dbConfig = Application::getInstance()->config['database']['slave'][$slaveId];
+            }
+
             try {
                 $dsn = 'mysql:host=' . $dbConfig['host'] . ';dbname=' . $dbConfig['dbname'] . ';port:' . $dbConfig['port'];
                 $db = new Pdo($dsn, $dbConfig['user'], $dbConfig['password']);
@@ -25,7 +42,7 @@ class Factory
             $db->query("SET NAMES 'UTF8'");
             // set the default fetch mode
             $db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-            Register::set('db', $db);
+            Register::set($registerId, $db);
         }
         return $db;
     }

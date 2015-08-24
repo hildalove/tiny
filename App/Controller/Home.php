@@ -42,4 +42,5 @@ class Home extends AbstractController
         $redis->set('name', 'hanfeng');
         echo $redis->get('name');
     }
+
 }

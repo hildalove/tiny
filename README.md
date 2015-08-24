@@ -15,7 +15,7 @@
 
 ### Example
 - Redis存储用户登录信息
-
+- 用Redis实现消息队列
 
 
 
