@@ -1,0 +1,15 @@
+{
+  "name": "hildalove/tiny",
+  "description": "A tiny PHP Framework",
+  "authors": [
+    {
+      "name": "michael",
+      "email": "hanfeng.name@gmail.com"
+    }
+  ],
+  "autoload": {
+    "classmap": [
+      "App/Library"
+    ]
+  }
+}

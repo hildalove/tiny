@@ -6,7 +6,9 @@ class Route
     public static function dispatch()
     {
         $uri = $_SERVER['REQUEST_URI']; // /home/index
-
+        if (false !== strpos($uri, '?')){
+            $uri = strstr($uri, '?', true);
+        }
         list($c, $v) = explode('/', trim($uri, '/'));
 
         //$c_low = strtolower($c);
